@@ -41,11 +41,11 @@ webResources {
         js "webjars/jquery/$versionJQuery/jquery.min.js"
     }
     bundle ('theme-default') {
-        css "webjars/bootstrap/$versionBootstrap/css/bootstrap.min.css"
+        css "webjars/bootstrap/$versionBootstrap/less/bootstrap.less"
         css 'themes/default/main.css'
-        css 'themes/default/another-stylesheet.css'
 
-        preProcessor 'cssUrlRewriting'
+        cssOverrideImport "variables.less", "../../../../themes/default/variables.less"
+        preProcessor 'less4j', 'cssUrlRewriting'
     }
     assets {
         include 'themes/default/images/**'

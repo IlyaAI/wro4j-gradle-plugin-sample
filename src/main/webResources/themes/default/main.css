@@ -3,4 +3,9 @@
     width: 32px;
     height: 32px;
     background-image: url("images/logo.png");
+    vertical-align: middle;
+}
+
+.btn-toolbar {
+    margin: 8px;
 }
