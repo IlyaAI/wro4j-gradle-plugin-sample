@@ -6,8 +6,13 @@ buildscript {
     }
     dependencies {
         classpath ('ro.isdc.wro4j.gradle:wro4j-gradle-plugin:1.7.9') { changing = true }
+        classpath 'com.moowork.gradle:gradle-node-plugin:0.11'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.0.RELEASE'
     }
+}
+
+repositories {
+    jcenter()
 }
 
 group = 'ro.isdc.wro4j.gradle'
@@ -15,19 +20,20 @@ version = '1.7.9'
 
 apply plugin: 'java'
 apply plugin: 'wro4j'
+apply plugin: 'com.moowork.node'
 apply plugin: 'spring-boot'
 
-repositories {
-    jcenter()
+node {
+    download = true
 }
 
 ext {
     versionJQuery = '2.1.4'
     versionBootstrap = '3.3.4'
+    versionJasmine = '2.3.4'
 }
 
 webResources {
-
     bundle ('core') {
         js 'js/**.js'
         preProcessor 'jsMin'
@@ -48,6 +54,24 @@ webResources {
     assets {
         include 'themes/default/images/**'
     }
+
+    testAssets {
+        from (srcTestDir) {
+            exclude '*SpecRunner.html'
+            exclude '*.conf.js'
+        }
+
+        from (srcTestDir) {
+            include '*SpecRunner.html'
+            include '*.conf.js'
+
+            expand([
+                'srcMain': buildMainUri,
+                'srcTest': buildTestUri,
+                'webjarJasmine': "$buildTestUri/webjars/jasmine/$versionJasmine"
+            ])
+        }
+    }
 }
 
 dependencies {
@@ -55,4 +79,24 @@ dependencies {
 
     webjars "org.webjars:jquery:$versionJQuery"
     webjars "org.webjars:bootstrap:$versionBootstrap"
+
+    webjarsTest "org.webjars.bower:jasmine:$versionJasmine"
 }
+
+task cleanNodeModules(type: Delete)  {
+    delete file('node_modules')
+}
+
+task installJasmine(type: NpmTask) {
+    outputs.dir file("node_modules")
+
+    npmCommand = ['install']
+    args += ['karma', 'karma-jasmine@2_0', 'karma-phantomjs-launcher']
+}
+
+task runJasmine(type: NodeTask, dependsOn: [installJasmine, processWebTestResources]) {
+    script = file("node_modules/karma/bin/karma")
+    args = ['start', "${webResources.buildTestDir}/karma.conf.js"]
+}
+
+test.dependsOn runJasmine
