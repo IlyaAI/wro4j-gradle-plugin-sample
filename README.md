@@ -2,16 +2,16 @@
 
 Demonstrate usage of [Wro4J Gradle Plugin](https://github.com/IlyaAI/wro4j-gradle-plugin)
 
-build.gradle
+### build.gradle
 ```groovy
 buildscript {
     repositories {
         jcenter()
         maven { url 'http://repo.spring.io/libs-snapshot' }
-        mavenLocal() // suppose plugin located in local maven repo (not published yet)
+        maven { url 'https://dl.bintray.com/ilyaai/maven' }
     }
     dependencies {
-        classpath ('ro.isdc.wro4j.gradle:wro4j-gradle-plugin:1.7.9') { changing = true }
+        classpath 'ro.isdc.wro4j.gradle:wro4j-gradle-plugin:1.7.9-Beta2'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.0.RELEASE'
     }
 }
@@ -34,7 +34,7 @@ ext {
 
 webResources {
     bundle ('core') {
-        js 'js/**.js'
+        js 'js/**/*.js'
         preProcessor 'jsMin'
     }
     bundle ('libs') {
@@ -44,8 +44,9 @@ webResources {
         css "webjars/bootstrap/$versionBootstrap/less/bootstrap.less"
         css 'themes/default/main.css'
 
-        cssOverrideImport "variables.less", "../../../../themes/default/variables.less"
-        preProcessor 'less4j', 'cssUrlRewriting'
+        cssOverrideImport 'variables.less', '../../../../themes/default/variables.less'
+        preProcessor 'less4j'
+        cssRewriteUrl()
     }
     assets {
         include 'themes/default/images/**'
@@ -58,3 +59,16 @@ dependencies {
     webjars "org.webjars:bootstrap:$versionBootstrap"
 }
 ```
+
+### Continuous Build
+
+Run the following commands (in separate consoles):
+```
+gradlew bootRun
+```
+and
+```
+gradlew processWebResources -t
+```
+Now when you edit your web resources Gradle will re-process them on the fly.
+You only need to refresh your page in a browser to see changes.
