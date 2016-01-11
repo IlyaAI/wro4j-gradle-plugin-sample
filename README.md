@@ -11,7 +11,7 @@ buildscript {
         maven { url 'https://dl.bintray.com/ilyaai/maven' }
     }
     dependencies {
-        classpath 'ro.isdc.wro4j.gradle:wro4j-gradle-plugin:1.7.9-Beta2'
+        classpath 'ro.isdc.wro4j.gradle:wro4j-gradle-plugin:1.7.9.Beta2'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.0.RELEASE'
     }
 }
