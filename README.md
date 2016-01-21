@@ -11,10 +11,9 @@ buildscript {
     repositories {
         jcenter()
         maven { url 'http://repo.spring.io/libs-snapshot' }
-        maven { url 'https://dl.bintray.com/ilyaai/maven' }
     }
     dependencies {
-        classpath 'ro.isdc.wro4j.gradle:wro4j-gradle-plugin:1.7.9.Beta2'
+        classpath 'ro.isdc.wro4j.gradle:wro4j-gradle-plugin:1.7.9.Beta3'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.0.RELEASE'
     }
 }
@@ -59,7 +58,9 @@ webResources {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     webjars "org.webjars:jquery:$versionJQuery"
-    webjars "org.webjars:bootstrap:$versionBootstrap"
+    webjarsRuntime ("org.webjars:bootstrap:$versionBootstrap") {
+        transitive = false
+    }
 }
 ```
 
