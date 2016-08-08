@@ -2,10 +2,9 @@ buildscript {
     repositories {
         jcenter()
         maven { url 'http://repo.spring.io/libs-snapshot' }
-        //mavenLocal()
     }
     dependencies {
-        classpath 'ro.isdc.wro4j.gradle:wro4j-gradle-plugin:1.7.9.Beta3'
+        classpath 'ro.isdc.wro4j.gradle:wro4j-gradle-plugin:1.8.0.Beta4'
         classpath 'com.moowork.gradle:gradle-node-plugin:0.11'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.0.RELEASE'
     }
@@ -16,7 +15,7 @@ repositories {
 }
 
 group = 'ro.isdc.wro4j.gradle'
-version = '1.7.9'
+version = '1.8.0'
 
 apply plugin: 'java'
 apply plugin: 'wro4j'
@@ -54,6 +53,12 @@ webResources {
 
     assets {
         include 'themes/default/images/**'
+
+        /* Uncomment the following lines if you prefer to copy fonts to your /static/themes/default/fonts */
+        /*from ("$buildMainDir/webjars/bootstrap/$versionBootstrap/fonts") {
+            include '**'
+            into 'themes/default/fonts'
+        }*/
     }
 
     testAssets {
@@ -79,6 +84,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
 
     webjars "org.webjars:jquery:$versionJQuery"
+
+    /* Use `webjars "org.webjars:bootstrap:$versionBootstrap"` instead if you prefer to have fonts in your /static/... */
     webjarsRuntime ("org.webjars:bootstrap:$versionBootstrap") {
         transitive = false
     }
